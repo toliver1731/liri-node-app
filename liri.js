@@ -55,10 +55,7 @@ switch(operator) {
                         selectMovie(directions[1]);
                         return
                     }
-                    default: {
-                        console.log("Nothing in file");
-                        return;
-                    }
+                   
                 }
             });
         return;
@@ -89,8 +86,6 @@ function selectSong(songName) {
                     return console.log('Error occurred: ' + err);
                 }
                 
-
-                    // console.log(data.tracks.items[2].album);
                 for(var i = 0; i < limit; i++) {
 
                     console.log("Result ${i+1}");
@@ -129,16 +124,13 @@ function selectSong(songName) {
 }
 
 function selectMovie(movieName) {
-    // var movieName = process.argv[3];
-        // Then run a request to the OMDB API with the movie specified
         if (process.argv[3]) {
             var queryUrl = "http://www.omdbapi.com/?t=" + process.argv[3] + "&y=&plot=short&apikey=40e9cece";
           } else {
             var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
           }
-        // console.log(queryUrl);
+    
         request(queryUrl, function(error, response, body) {
-          // If the request is successful (i.e. if the response status code is 200)
               if (!error && response.statusCode === 200) {
                 console.log("Title: " + JSON.parse(body).Title);
                 console.log("Year: " + JSON.parse(body).Year);
