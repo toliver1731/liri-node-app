@@ -25,11 +25,11 @@ switch(operator) {
         return;
     }
     case("spotify-this-song"): {
-        selectSong();
+        getSong();
         return;
     }
     case("movie-this"): {
-        selectMovie();      
+        getMovie();      
         return;
 
     }
@@ -47,12 +47,12 @@ switch(operator) {
                         myTweets();
                         return;
                     }
-                    case "spotify-this-song": {
-                        selectSong(directions[1]);
+                     case "movie-this": {
+                        getMovie(directions[1]);
                         return
                     }
-                    case "movie-this": {
-                        selectMovie(directions[1]);
+                   case "spotify-this-song": {
+                        getSong(directions[1]);
                         return
                     }
                    
@@ -70,65 +70,21 @@ function myTweets() {
     client.get("statuses/user_timeline", params, function(error, tweets, response) {
         if (!error) {
           for (var i = 0; i < tweets.length; i++) {
-            console.log("Created: ${tweets[i].created_at}\nTweet: ${tweets[i].text}\n");
+            console.log(`Created: ${tweets[i].created_at}\nTweet: ${tweets[i].text}\n`);
           }
         }
     })
 }
 
-function selectSong(songName) {
-    var songName = process.argv[3];
-        var limit = 10;
 
-        if(!songName){
-            spotify.search({ type: "track", query: "The Sign Ace of Base", limit: limit}, function(err, data) {
-                if (err) {
-                    return console.log('Error occurred: ' + err);
-                }
-                
-                for(var i = 0; i < limit; i++) {
-
-                    console.log("Result ${i+1}");
-                    console.log("Artist(s) Name: ${data.tracks.items[i].artists[0].name}"); 
-                    console.log("Album Name: ${data.tracks.items[i].album.name}"); 
-                    console.log("Song Name: ${data.tracks.items[i].name}");  
-                    console.log("Spotify Preview Link: ${data.tracks.items[i].external_urls.spotify}"); 
-                    console.log("Popularity: ${data.tracks.items[i].popularity}"); 
-                    console.log("\n");
-                }
-            });
-        } else {
-            spotify.search({ type: 'track', query: songName, limit: limit}, function(err, data) {
-              if (err) {
-                return console.log('Error occurred: ' + err);
-              }
-                    console.log(`----------------------------------------`);
-                    console.log(`Search Results for Song: ${songName}`);
-                    console.log(`----------------------------------------`);
-                    console.log(`\n`);
-
-                for(var i = 0; i < limit; i++) {
-
-                    console.log(`Result ${i+1}`);
-                    console.log(`----------------------------------------`);
-                    console.log(`Artist(s) Name: ${data.tracks.items[i].artists[0].name}`); 
-                    console.log(`Album Name: ${data.tracks.items[i].album.name}`); 
-                    console.log(`Song Name: ${data.tracks.items[i].name}`);  
-                    console.log(`Spotify Preview Link: ${data.tracks.items[i].external_urls.spotify}`); 
-                    console.log(`Popularity: ${data.tracks.items[i].popularity}`); 
-                    console.log(`----------------------------------------`);
-                    console.log(`\n`);
-                }
-            });
-        }
-}
-
-function selectMovie(movieName) {
+function getMovie(movieName) {
         if (process.argv[3]) {
             var queryUrl = "http://www.omdbapi.com/?t=" + process.argv[3] + "&y=&plot=short&apikey=40e9cece";
           } else {
             var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
           }
+
+
     
         request(queryUrl, function(error, response, body) {
               if (!error && response.statusCode === 200) {
@@ -142,4 +98,50 @@ function selectMovie(movieName) {
                 console.log("Actors: " + JSON.parse(body).Actors);
               }
         });
+}
+
+function getSong(songName) {
+    var songName = process.argv[3];
+        var limit = 10;
+
+        if(!songName){
+            spotify.search({ type: "track", query: "The Sign Ace of Base", limit: limit}, function(err, data) {
+                if (err) {
+                    return console.log('Error occurred: ' + err);
+                }
+
+                
+                for(var i = 0; i < limit; i++) {
+
+                    console.log(`Result ${i+1}`);
+                    console.log(`Artist(s) Name: ${data.tracks.items[i].artists[0].name}`); 
+                    console.log(`Album Name: ${data.tracks.items[i].album.name}`); 
+                    console.log(`Song Name: ${data.tracks.items[i].name}`);  
+                    console.log(`Spotify Preview Link: ${data.tracks.items[i].external_urls.spotify}`); 
+                    console.log(`Popularity: ${data.tracks.items[i].popularity}`); 
+                    console.log(`\n`);
+                }
+            });
+        } else {
+            spotify.search({ type: 'track', query: songName, limit: limit}, function(err, data) {
+              if (err) {
+                return console.log('Error occurred: ' + err);
+              }
+            
+                    console.log(`Search Results for Song: ${songName}`);
+                    console.log(`\n`);
+
+                for(var i = 0; i < limit; i++) {
+
+                    console.log(`♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬♬`);
+                    console.log(`Result ${i+1}`);
+                    console.log(`Artist(s) Name: ${data.tracks.items[i].artists[0].name}`); 
+                    console.log(`Album Name: ${data.tracks.items[i].album.name}`); 
+                    console.log(`Song Name: ${data.tracks.items[i].name}`);  
+                    console.log(`Spotify Preview Link: ${data.tracks.items[i].external_urls.spotify}`); 
+                    console.log(`Popularity: ${data.tracks.items[i].popularity}`); 
+                    console.log(`\n`);
+                }
+            });
+        }
 }
